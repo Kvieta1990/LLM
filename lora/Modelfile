@@ -1,0 +1,1 @@
+FROM ./models/mistral_pd.gguf

@@ -1,0 +1,65 @@
+Fine-Tuning with LoRA or QLoRA
+===
+
+This is an example of using MLX to fine-tune an LLM with low rank adaptation (LoRA).
+
+The source of current repo originates from the official `mlx-examples` repository below,
+
+[https://github.com/ml-explore/mlx-examples.git](https://github.com/ml-explore/mlx-examples.git)
+
+> See the `lora` directory in the original repo above.
+
+Basic steps for using LORA to obtain a fine-tuned model involve,
+
+    - LORA fine-Tuning
+
+    - Fuse adapter to model
+
+    - Convert model to compatible format, e.g., with `ollama`
+
+The `mlx-lm` module will be used for performing the fine-tuning and model fusing conveniently. The converter script from the following repo will be used for the model conversion into the format compatible with `ollama`.
+
+[https://github.com/ggerganov/llama.cpp](https://github.com/ggerganov/llama.cpp)
+
+After the model fine-tuning, fusing and conversion (to `ollama` format), we will be using `ollama` to call the fine-tuned model to make predictions. To install `ollama`, follow the link [here](https://ollama.com/download). On MacOS, following the instructions [here](https://medium.com/@anand34577/setting-up-ollama-as-a-background-service-on-macos-66f7492b5cc8) to set up `ollama` to run as a background service.
+
+Assuming `ollama` is installed, we can following the steps below to run the model fine-tuning, fusing and conversion.
+
+First, set up the environment (skip if already done),
+
+```
+mamba create -n mlx python=3.13
+mamba activate mlx
+pip install -r requirements.txt
+```
+
+Then run the script `lora_to_ollama.sh`,
+
+```
+./lora_to_ollama.sh
+```
+
+where we put together the model fine-tuning, fusing and conversion. Input parameters in the script need to be changed to reflect the converter script location and output model name, etc. Some useful resources regarding the fine-tuning and model conversion using the `mlx` framework can be found [here](https://www.youtube.com/watch?v=3UQ7GY9hNwk) and [here](https://medium.com/@meirgotroot/bringing-your-fine-tuned-mlx-model-to-life-with-ollama-integration-c54274de6491).
+
+The script above will generate a model file named `mistral_pd.gguf` under the `models` directory (see the script above for the specification of model save location). The `ollama` command called at the end of the script will then generate `ollama` compatible model and put it in the place where `ollama` can fine (usually, under `~/.ollama/models`). Names of those `ollama` model files are not human readable, and we can see what models are available with `ollama` via the `ollama list` command (see the `lora_to_ollama.sh` script above). 
+
+> The `ollama` model creation is realized through the `ollama create mistral_pd -f Modelfile` command where the `Modelfile` is generated inside the `lora_to_ollama.sh` script right before the `ollama` model creation. The created `mistral_pd` model in this case will be overwriting the existing one (if any).
+
+Once the fine-tuned model is available in `ollama`, we can run `ollama` with the model and see how it behaves. For such a purpose, we can go to the `ollama_call` directory and run the `ollama_call.sh` script from there,
+
+```
+cd ollama_call
+./ollama_call.sh
+```
+
+which calls the Python script `ollama_main.py` in the same directory. We can change the `ollama_call.sh` script for calling the Python script differently, e.g., using a different model than the fine-tuned one to compare and see the effect of the model fine-tuning. The default model option in the script is using the fine-tuned one `mistral_pd`. Running the default script, we will see the output of the database query command. If we change the model to `mistral` (the downloaded model through the `ollama` GUI interface), we will see a pretty much general response instead.
+
+Mote Notes
+===
+
+Running the `lora_to_ollama.sh` script mentioned above, we will finally obtain the `ollama` model which we can run locally with `ollama`. In fact, before the `ollama` model creation step, the model conversion step would generate the model file `mistral_pd.gguf` under the `models` directory. The `gguf` model file can be uploaded to the `Huggingface` platform, using either the web interface or the command line interface (CLI). Assuming we are located in the `models` directory, we can run the following commands to upload the fine-tuned model to the hugging face repository. Free users can upload up to 100 GB, beyond which we then need to pay.
+
+```
+hf auth login  # we need to generate the access token from the `Huggingface` web interface.
+./hf_upload.sh  # check the script in `models` directory
+```
