@@ -11,13 +11,13 @@ The source of current repo originates from the official `mlx-examples` repositor
 
 Basic steps for using LORA to obtain a fine-tuned model involve,
 
-    - LORA fine-Tuning
+- LORA fine-Tuning
 
-    - Fuse adapter into the original model
+- Fuse adapter into the original model
 
-    - Convert the fused model to compatible formats, e.g., with `ollama`
+- Convert the fused model to compatible formats, e.g., with `ollama`
 
-    - Upload the fine-tuned model to HuggingFace
+- Upload the fine-tuned model to HuggingFace
 
 The `mlx-lm` module will be used for performing the fine-tuning and model fusing conveniently. The converter script from the following repo will be used for the model conversion into the format compatible with `ollama`.
 
