@@ -4,3 +4,4 @@ __pycache__
 lora/models/*.gguf
 lora/models/mistral_pd/
 lora/adapters/
+lora/data/.openai_apikey
