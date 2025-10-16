@@ -147,7 +147,7 @@ def combine_training_data(original_file, multiturn_file, combined_file):
 
 
 if __name__ == "__main__":
-    input_file = "train.jsonl"
+    input_file = "train_test.jsonl"
     raw_output_file = "multiturn_raw_output.txt"
     multiturn_file = "train_multiturn.jsonl"
     combined_file = "train_mt.jsonl"

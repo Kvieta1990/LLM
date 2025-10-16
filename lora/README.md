@@ -56,7 +56,7 @@ cd ollama_call
 
 which calls the Python script `ollama_main.py` in the same directory. We can change the `ollama_call.sh` script for calling the Python script differently, e.g., using a different model than the fine-tuned one to compare and see the effect of the model fine-tuning. The default model option in the script is using the fine-tuned one `mistral_pd`. Running the default script, we will see the output of the database query command. If we change the model to `mistral` (the downloaded model through the `ollama` GUI interface), we will see a pretty much general response instead.
 
-Mote Notes
+More Notes
 ===
 
 Running the `lora_to_ollama.sh` script mentioned above, we will finally obtain the `ollama` model which we can run locally with `ollama`. In fact, before the `ollama` model creation step, the model conversion step would generate the model file `mistral_pd.gguf` under the `models` directory. The `gguf` model file can be uploaded to the `HuggingFace` platform, using either the web interface or the command line interface (CLI). Assuming we are located in the `models` directory, we can run the following commands to upload the fine-tuned model to the `HuggingFace` repository. Free users have 100 GB allocation, beyond which we then need to pay.
@@ -65,3 +65,15 @@ Running the `lora_to_ollama.sh` script mentioned above, we will finally obtain t
 hf auth login  # we need to generate the access token from the `Huggingface` web interface.
 ./hf_upload.sh  # check the script in `models` directory for all the running commands.
 ```
+
+---
+
+To download a model from HuggingFace, we can run the command like what follows,
+
+```bash
+hf download unsloth/Llama-3.3-70B-Instruct-GGUF
+```
+
+where `unsloth/Llama-3.3-70B-Instruct-GGUF` is the mode to download -- we can copy the full name of the model from the HuggingFace web interface like shown below,
+
+![HuggingFace model name](../imgs/hf_model_name.png)
