@@ -66,6 +66,12 @@ hf auth login  # we need to generate the access token from the `Huggingface` web
 ./hf_upload.sh  # check the script in `models` directory for all the running commands.
 ```
 
+The `hf` command is the command line interface (CLI) for HuggingFace, which can be installed via,
+
+```bash
+pip install -U "huggingface_hub[cli]"
+```
+
 ---
 
 To download a model from HuggingFace, we can run the command like what follows,
@@ -77,3 +83,51 @@ hf download unsloth/Llama-3.3-70B-Instruct-GGUF
 where `unsloth/Llama-3.3-70B-Instruct-GGUF` is the mode to download -- we can copy the full name of the model from the HuggingFace web interface like shown below,
 
 ![HuggingFace model name](../imgs/hf_model_name.png)
+
+The downloaded model will be saved to `~/.cache/huggingface/hub/` directory.
+
+---
+
+We can use the following commands to manage (e.g., scan/list and delete) HuggingFace models,
+
+```bash
+pip install -U "huggingface_hub[cli]". # do this if the `hf` command is not already available
+hf cache scan
+hf cache delete <model_name>
+```
+
+---
+
+To download a model from ollama, we can first go the ollama library [here](https://ollama.com/library) and click into the model that we want, e.g., `gpt-oss`. Then we will see those alternative variations of the model, like shown below,
+
+![Ollama model name](../imgs/ollama_model_name.png)
+
+Then running the following command will download the specified model to locally,
+
+```bash
+ollama pull gpt-oss
+```
+
+> If no ":" is included in the model name, by default, ollama will try to pull the latest model, e.g., `gpt-oss:latest`.
+
+Or, if we directly run the model like this,
+
+```bash
+ollama run gpt-oss
+```
+
+and if the model is not already existing locally, ollama will try to pull it first, followed by running it. To check what models are locally available to be used in `ollama`, we can run,
+
+```bash
+ollama list
+```
+
+---
+
+Here follows is presented a list of some useful/powerful models,
+
+- [OpenAI open access models (gpt-oss) on HuggingFace](https://huggingface.co/openai)
+
+- [OpenAI open access models (gpt-oss) on Ollama](https://ollama.com/library/gpt-oss)
+
+- [Ollama models library](https://ollama.com/library/)

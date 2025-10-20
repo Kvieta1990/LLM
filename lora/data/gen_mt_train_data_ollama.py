@@ -27,27 +27,71 @@ def create_user_prompt(training_line):
     # Escape the training line for proper JSON formatting in the prompt
     escaped_line = training_line.replace('"', '\\"').replace('\n', '\\n').replace("\\u", '\\\\u')
 
-    user_prompt = f"""I have a training data like follows for my LLM fine tuning,
+    table = escaped_line.split("\\n")[0].split(":")[2].strip()
+    column = escaped_line.split("\\n")[1].split(":")[1].strip()
+    question = escaped_line.split("\\n")[2].split(":")[1].strip()
+    answer = escaped_line.split("\\n")[3].split(":")[1].strip().replace('\\"}', '')
 
-{escaped_line}
+    user_prompt = f"""I am creating a set of training data for a table schema. The context and original training sample provided should serve as a guide. Your task is to generate 15 variations of this training data. Please strictly adhere to the following instructions:
 
-Can you generate ten extra lines from the line to cover a few possibilities of incomplete questions and the corresponding response to ask for more details?
+Original Training Data Context:
 
-In those ten extra lines, five of them should be a single round of question and answer, and the other five should be multiple rounds of question and answer (at least two rounds of question and answer).
+    - Table Schema:
 
-For the single round of question and answer, the question should be an incomplete one and the answer should ask for clarification.
+    table: {table}
+    columns: {column}
 
-For the multiple rounds of question and answer, the follow-up rounds should be based on the previous rounds, until all the contextually related information is complete so the final anwer, i.e., the database command, can be given.
+    - Example Single-Round Q&A:
 
-Please include your response in the jsonl format for those extra lines so I can process your output in a script.
+    Q: {question}
+    A: {answer}
 
-The format should follow this exact structure:
-- Start with the same table schema and columns
-- Use Q: for questions and A: for answers
-- For incomplete questions, the answer should ask for clarification
-- Output should be valid JSONL format (one JSON object per line)
+Task Instructions:
 
-In your response, please ensure that all unicode are preserved, i.e., do not convert them to their representative forms."""
+    1. Generate 15 Variations:
+
+        - First 5 Variations:
+
+            - Create single-round Q&A pairs.
+            - Alter the expression of the question while preserving its original meaning.
+            - The answer should remain a SQL-like query string.
+
+        - Next 5 Variations:
+
+            - Formulate questions that seek similar information but are incomplete.
+            - The answer should ask for further clarification needed to provide a complete response.
+
+        - Final 5 Variations:
+
+            - Simulate multi-round conversations.
+            - Start with an incomplete question and follow up with a clarifying response until all necessary details are provided.
+            - Conclude with a SQL-like query when the question becomes complete.
+
+Output Format:
+
+    - Ensure each Q&A pair or multi-round conversation follows a valid JSONL format.
+    - Ensure to have a complete question in Q, not to include anything like '...'
+    - Ensure to have a full sentence with correct grammar in Q, not something like 'What are the notes for?'
+    - Maintain the original table schema in each example.
+    - Use Q: for questions and A: for answers.
+    - Preserve all Unicode characters in the output, i.e., do not convert them to their representative forms.
+    - Organize all your response together, not to have sections like single-round variations, incomplete question variations or multiple round conversations.
+
+Examples:
+
+    - Single-Round Variation:
+
+    {{"text": "table: 1-1000181-1\\ncolumns: State/territory, Text/background colour, Format, Current slogan, Current series, Notes\\nQ: What's the information in the notes for South Australia's slogan?\\nA: SELECT Notes FROM 1-1000181-1 WHERE Current slogan = 'SOUTH AUSTRALIA'"}}
+
+    - Incomplete Question Example:
+
+    {{"text": "table: 1-1000181-1\\ncolumns: State/territory, Text/background colour, Format, Current slogan, Current series, Notes\\nQ: Provide notes info on the state\\nA: Can you clarify which state's notes details you're looking for?"}}
+
+    - Multi-Round Conversation Example:
+
+    {{"text": "table: 1-1000181-1\\ncolumns: State/territory, Text/background colour, Format, Current slogan, Current series, Notes\\nQ: Gather notes details on state\\nA: Which state are you interested in for notes details?\\nQ: I'd like information on South Australia.\\nA: SELECT Notes FROM 1-1000181-1 WHERE Current slogan = 'SOUTH AUSTRALIA'"}}
+
+By following these structured instructions, ensure that the output is clear, contextually consistent, and formatted correctly. Aim to achieve diverse yet accurate variations adequate for training purposes."""
 
     return user_prompt
 
