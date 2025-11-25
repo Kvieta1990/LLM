@@ -101,6 +101,14 @@ def generate_addie_training_data():
         "I need information about {prop}."
     ]
 
+    # Additional specific questions (direct additions)
+    additional_questions = [
+        "I want to estimate how strongly my sample is absorbing neutrons",
+        "I want to calculate the resonance absorption for my sample",
+        "I want to calculate neutron absorption for my sample",
+        "How do I calculate neutron absorption for my sample?"
+    ]
+
     training_data = []
 
     # Generate examples for calculation properties
@@ -141,6 +149,17 @@ def generate_addie_training_data():
                 )
             }
             training_data.append(entry)
+
+    # Add additional specific questions
+    for question in additional_questions:
+        entry = {
+            "text": (
+                f"Scope: General question about neutron/X-ray scattering\n"
+                f"Category: Calculation\nQ: {question}\n"
+                f"A: {response_template}"
+            )
+        }
+        training_data.append(entry)
 
     # Add mixed property requests
     mixed_patterns = [
@@ -202,6 +221,7 @@ print(f"Generated {len(training_examples)} training examples")
 print("Training data covers:")
 print("- 7 calculation properties")
 print("- 7 simulation/planning properties")
+print("- 4 additional specific questions")
 print("- ALL requests include available properties list")
 print("- Various ways to ask for calculations and simulations")
 print("- Mixed property requests")
