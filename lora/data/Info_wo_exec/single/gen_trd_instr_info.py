@@ -145,6 +145,11 @@ def generate_instrument_selection_training_data():
                 "How much material is required for an HB-2A experiment?",
                 "Sample quantity needed for HB-2A measurements?",
                 "What sample volume do I need for HB-2A?"
+                "Containers available for HB-2A",
+                "Containers available for HB-2A?",
+                "Containers available on HB-2A",
+                "Containers available on HB-2A?",
+                "What containers are available on HB-2A?"
             ],
             "answer": "On HB-2A, quite a few types of containers are available, including those Au and Cu standard cans, Al and Cu Tip-Top cans and vanadium standard cans. Specification of container sizes can be found here, https://neutrons.ornl.gov/powder/users. There is a tool on ADDIE web platform (https://addie.ornl.gov/hb2a_can_sel) for helping you with the container selection, depending on how much sample you have for the measurement."
         },

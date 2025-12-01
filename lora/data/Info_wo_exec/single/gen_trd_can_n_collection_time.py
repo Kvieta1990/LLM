@@ -1,0 +1,188 @@
+import json
+
+
+def generate_container_measurement_training_data():
+    """Generate training data for container availability and measurement time queries in JSONL format"""
+
+    training_data = []
+
+    # Container availability Q&A pairs
+    container_data = [
+        {
+            "instrument": "HB-2C",
+            "questions": [
+                "What containers are available on HB-2C for powder measurements?",
+                "What sample containers can I use on HB-2C?",
+                "Which cans are available for HB-2C powder measurements?",
+                "What are the container options for HB-2C?",
+                "Tell me about HB-2C sample containers"
+            ],
+            "answer": "There are mainly two types of containers available on HB-2C for powder measurements, namely the vanadium and aluminum can. For the vanadium can, there are typically four sizes available, with the diameter of 3 mm, 6 mm, 8 mm and 10 mm. For the aluminum can, there are also four sizes available, with the diameter of 4 mm, 6 mm, 8 mm and 10 mm."
+        },
+        {
+            "instrument": "WAND",
+            "questions": [
+                "What containers are available on WAND for powder measurements?",
+                "What sample containers can I use on WAND?",
+                "Which cans are available for WAND powder measurements?",
+                "What are the container options for WAND?",
+                "Tell me about WAND sample containers"
+            ],
+            "answer": "There are mainly two types of containers available on HB-2C for powder measurements, namely the vanadium and aluminum can. For the vanadium can, there are typically four sizes available, with the diameter of 3 mm, 6 mm, 8 mm and 10 mm. For the aluminum can, there are also four sizes available, with the diameter of 4 mm, 6 mm, 8 mm and 10 mm."
+        },
+        {
+            "instrument": "HB-2A",
+            "questions": [
+                "What containers are available on HB-2A?",
+                "What sample containers can I use on HB-2A?",
+                "Which cans are available for HB-2A measurements?",
+                "What are the container options for HB-2A?",
+                "Tell me about HB-2A sample containers"
+            ],
+            "answer": "On HB-2A, quite a few types of containers are available, including those Au and Cu standard cans, Al and Cu Tip-Top cans and vanadium standard cans. Specification of container sizes can be found here, https://neutrons.ornl.gov/powder/users. There is a tool on ADDIE web platform (https://addie.ornl.gov/hb2a_can_sel) for helping you with the container selection, depending on how much sample you have for the measurement."
+        },
+        {
+            "instrument": "NOMAD",
+            "questions": [
+                "What containers are available on NOMAD?",
+                "What sample containers can I use on NOMAD?",
+                "Which cans are available for NOMAD measurements?",
+                "What are the container options for NOMAD?",
+                "Tell me about NOMAD sample containers"
+            ],
+            "answer": "There are mainly two types of containers available on NOMAD, those made of vanadium and silica. The 6 mm (diameter) vanadium can is usually used and for the quartz capillary, the diameter in use usually is 3 mm. Sometimes, the 8 mm (diameter) vanadium can is also used for the measurement. Different sample environment may have different requirement for the container size (basically, it is all about the sample amount/mass). For example, the cryostat sample environment for low temperature measurements is considered as being with high background and therefore we have to choose the vanadium can to guarantee a good quality of total scattering data. Depending on the container chosen for the measurement, we need to have samples filling the container to at least meet the beam height (~ 2 cm). Having less sample amount than optimal, it is still possible to obtain a reasonable pair distribution function (PDF) but longer data collection time and low data quality may be expected."
+        },
+        {
+            "instrument": "POWGEN",
+            "questions": [
+                "What containers are available on POWGEN?",
+                "What sample containers can I use on POWGEN?",
+                "Which cans are available for POWGEN measurements?",
+                "What are the container options for POWGEN?",
+                "Tell me about POWGEN sample containers"
+            ],
+            "answer": "Containers made of vanadium are usually used on POWGEN and commonly there are four choices of the container size, namely with the diameter of 3 mm, 6 mm, 8 mm and 10 mm. Due to the low-flux (intrinsic, as the result of yielding high resolution) on POWGEN, the 3 mm vanadium can is rarely used."
+        }
+    ]
+
+    # Measurement time Q&A pairs
+    measurement_time_data = [
+        {
+            "instrument": "HB-2A",
+            "questions": [
+                "How long should I measure my sample on HB-2A?",
+                "What is the typical measurement time on HB-2A?",
+                "How much time does a HB-2A measurement take?",
+                "What is the data collection time for HB-2A?",
+                "How long to collect data on HB-2A?"
+            ],
+            "answer": "Depending on how strongly your sample will be scattering neutrons, the measurement time required may vary. In general, a typical measurement may take 1 hour or so. There is a web-based tool at https://addie.ornl.gov/hfirestimate for estimating the uncertainty level depending on the sample and mass, which could be useful for you to make the decision."
+        },
+        {
+            "instrument": "HB-2C",
+            "questions": [
+                "How long should I measure my sample on HB-2C?",
+                "What is the typical measurement time on HB-2C?",
+                "How much time does a HB-2C measurement take?",
+                "What is the data collection time for HB-2C?",
+                "How long to collect data on HB-2C?"
+            ],
+            "answer": "Depending on how strongly your sample will be scattering neutrons, the measurement time required may vary. In general, a typical measurement may take half an hour or longer. There is a web-based tool at https://addie.ornl.gov/hfirestimate for estimating the uncertainty level depending on the sample and mass, which could be useful for you to make the decision."
+        },
+        {
+            "instrument": "WAND",
+            "questions": [
+                "How long should I measure my sample on WAND?",
+                "What is the typical measurement time on WAND?",
+                "How much time does a WAND measurement take?",
+                "What is the data collection time for WAND?",
+                "How long to collect data on WAND?"
+            ],
+            "answer": "Depending on how strongly your sample will be scattering neutrons, the measurement time required may vary. In general, a typical measurement may take half an hour or longer. There is a web-based tool at https://addie.ornl.gov/hfirestimate for estimating the uncertainty level depending on the sample and mass, which could be useful for you to make the decision."
+        },
+        {
+            "instrument": "NOMAD",
+            "questions": [
+                "How long should I measure my sample on NOMAD?",
+                "What is the typical measurement time on NOMAD?",
+                "How much time does a NOMAD measurement take?",
+                "What is the data collection time for NOMAD?",
+                "How long to collect data on NOMAD?"
+            ],
+            "answer": "Depending on how strongly your sample will be scattering neutrons, the measurement time required may vary. In general, a typical measurement would take about 1 hour. Normally this is equivalent to about 4 C proton charge accumulation. More accurately, 1 hour nominal time corresponds to 5 C. However, commonly NOMAD takes the measurement with 2 C as a unit chunk. The reason why the proton charge is usually used for accumulation is that the beam can be down during the experiment -- if time is used for the accumulation, the beam down time would not be compensated. However, it should be noted that the necessary data collection time may depend on multiple factors such as the scattering cross section of the sample, the amount/mass of the sample and the actual beam power (as of writing, SNS beam power is 1.9 MW). For samples with just a tiny amount/mass, a proof-of-principle measurement of super long collection time may be tried, something like 20 C proton charge accumulation (~ 5 hours) or even longer. Regarding the data uncertainty, it should be kept in mind that the signal-to-noise level will increase proportionally to the inverse of the square root of the data collection time. For example, if we intend to double the signal-to-noise level, we need to collect for four times longer (e.g., go from 1 hour collection time to 4 hours). Also, as mentioned above, it is a common practice to collect the data by chunks. For example, for a 4 C proton charge accumulation, one would usually measure two chunks of data, each with 2 C proton charge accumulation. Fundamentally, this does not make any real difference as compared to collecting as a whole chunk since one could perform the event filtering afterwards anyhow to divide data into smaller chunks, using, e.g., the Mantid framework. It is really a matter of convention."
+        },
+        {
+            "instrument": "POWGEN",
+            "questions": [
+                "How long should I measure my sample on POWGEN?",
+                "What is the typical measurement time on POWGEN?",
+                "How much time does a POWGEN measurement take?",
+                "What is the data collection time for POWGEN?",
+                "How long to collect data on POWGEN?"
+            ],
+            "answer": "Depending on how strongly your sample will be scattering neutrons, the measurement time required may vary. Also, POWGEN can be used for taking measurements of both the Bragg diffraction data (where we don't care about the diffuse scattering signal) and the total scattering data (to obtain the pair distribution function, i.e., PDF), and depending on the actual need of the measurement, the collection time needed may vary. In general, a typical measurement would take at least 1 hour (~ 5 C proton charge accumulation). The reason why the proton charge is usually used for accumulation is that the beam can be down during the experiment -- if time is used for the accumulation, the beam down time would not be compensated. However, it should be noted that the necessary data collection time may depend on multiple factors such as the scattering cross section of the sample, the amount/mass of the sample and the actual beam power (as of writing, SNS beam power is 1.9 MW). In practice, a collection time of 2 or 3 hours for a Bragg diffraction pattern is also seen. For total scattering measurements, usually the collection time should be much longer than Bragg diffraction measurements. A collection of 2 or 3 hours is a typical reference. Also, it should be mentioned that POWGEN has three available wavelength frames (with the central wavelength of 0.8, 1.5 and 2.67 angstrom, respectively) for taking a measurement and a selection of the wavelength frame has to be made at the time of measurements. The longer wavelength frame yields high resolution Bragg diffraction patterns and has access to large d-spacing. The short wavelength frame (typically, the 0.8 angstrom one) should be used for total scattering measurements to guarantee a wide range of Q-space access. To get an idea about the accessible d or Q range for different wavelength frames on POWGEN, you can go to https://addie.ornl.gov/simulatingpowder and use the CIF file for the structure of interest to simulate the Bragg diffraction patterns on POWGEN. Typical instrument parameter files are encoded so you can also get a feel about the instrument resolution effect."
+        }
+    ]
+
+    # General measurement time question
+    general_measurement_time = {
+        "questions": [
+            "How long should I measure my sample?",
+            "What is the typical measurement time?",
+            "How much time does a measurement take?",
+            "What is the data collection time?",
+            "How long to collect data?"
+        ],
+        "answer": "This depends on which instrument you want to use for the measurement and what you are trying to measure. In general, depending on how strongly your sample will be scattering neutrons and a few other factors such as the amount/mass of the sample and the actual beam power, the measurement time required may vary. Specifically, for HB-2C (WAND^2), in general, a typical measurement may take half an hour or longer. There is a web-based tool at https://addie.ornl.gov/hfirestimate for estimating the uncertainty level depending on the sample and mass, which could be useful for you to make the decision. For HB-2A, in general, a typical measurement may take 1 hour or so. The web-based tool mentioned above at https://addie.ornl.gov/hfirestimate can also be used for estimating the uncertainty level depending on the sample and mass, which could be useful for you to make the decision.\n\nOn NOMAD, in general, a typical measurement would take about 1 hour. Normally this is equivalent to about 4 C proton charge accumulation. More accurately, 1 hour nominal time corresponds to 5 C. However, commonly NOMAD takes the measurement with 2 C as a unit chunk. The reason why the proton charge is usually used for accumulation is that the beam can be down during the experiment -- if time is used for the accumulation, the beam down time would not be compensated. However, it should be noted that the necessary data collection time may depend on multiple factors such as the scattering cross section of the sample, the amount/mass of the sample and the actual beam power (as of writing, SNS beam power is 1.9 MW). For samples with just a tiny amount/mass, a proof-of-principle measurement of super long collection time may be tried, something like 20 C proton charge accumulation (~ 5 hours) or even longer. Regarding the data uncertainty, it should be kept in mind that the signal-to-noise level will increase proportionally to the inverse of the square root of the data collection time. For example, if we intend to double the signal-to-noise level, we need to collect for four times longer (e.g., go from 1 hour collection time to 4 hours). Also, as mentioned above, it is a common practice to collect the data by chunks. For example, for a 4 C proton charge accumulation, one would usually measure two chunks of data, each with 2 C proton charge accumulation. Fundamentally, this does not make any real difference as compared to collecting as a whole chunk since one could perform the event filtering afterwards anyhow to divide data into smaller chunks, using, e.g., the Mantid framework. It is really a matter of convention.\n\nFor POWGEN, it can be used for taking measurements of both the Bragg diffraction data (where we don't care about the diffuse scattering signal) and the total scattering data (to obtain the pair distribution function, i.e., PDF), and depending on the actual need of the measurement, the collection time needed may vary. In general, a typical measurement would take at least 1 hour (~ 5 C proton charge accumulation). The reason why the proton charge is usually used for accumulation is that the beam can be down during the experiment -- if time is used for the accumulation, the beam down time would not be compensated. However, it should be noted that the necessary data collection time may depend on multiple factors such as the scattering cross section of the sample, the amount/mass of the sample and the actual beam power (as of writing, SNS beam power is 1.9 MW). In practice, a collection time of 2 or 3 hours for a Bragg diffraction pattern is also seen. For total scattering measurements, usually the collection time should be much longer than Bragg diffraction measurements. A collection of 2 or 3 hours is a typical reference. Also, it should be mentioned that POWGEN has three available wavelength frames (with the central wavelength of 0.8, 1.5 and 2.67 angstrom, respectively) for taking a measurement and a selection of the wavelength frame has to be made at the time of measurements. The longer wavelength frame yields high resolution Bragg diffraction patterns and has access to large d-spacing. The short wavelength frame (typically, the 0.8 angstrom one) should be used for total scattering measurements to guarantee a wide range of Q-space access. To get an idea about the accessible d or Q range for different wavelength frames on POWGEN, you can go to https://addie.ornl.gov/simulatingpowder and use the CIF file for the structure of interest to simulate the Bragg diffraction patterns on POWGEN. Typical instrument parameter files are encoded so you can also get a feel about the instrument resolution effect."
+    }
+
+    # Generate training data for container availability
+    for item in container_data:
+        for question in item["questions"]:
+            entry = {
+                "text": (
+                    f"Scope: Sample preparation\n"
+                    f"Category: Experimentation\nQ: {question}\n"
+                    f"A: {item['answer']}"
+                )
+            }
+            training_data.append(entry)
+
+    # Generate training data for measurement time
+    for item in measurement_time_data:
+        for question in item["questions"]:
+            entry = {
+                "text": (
+                    f"Scope: Measurement planning\n"
+                    f"Category: Experimentation\nQ: {question}\n"
+                    f"A: {item['answer']}"
+                )
+            }
+            training_data.append(entry)
+
+    # Add general measurement time questions
+    for question in general_measurement_time["questions"]:
+        entry = {
+            "text": (
+                f"Scope: Measurement planning\n"
+                f"Category: Experimentation\nQ: {question}\n"
+                f"A: {general_measurement_time['answer']}"
+            )
+        }
+        training_data.append(entry)
+
+    return training_data
+
+
+# Generate and save training data
+training_examples = generate_container_measurement_training_data()
+with open('train_can_n_collection_time.jsonl', 'w') as f:
+    for example in training_examples:
+        f.write(json.dumps(example) + '\n')
+
+print(f"Generated {len(training_examples)} training examples")
+print("Training data covers:")
+print("- Container availability questions (5 instruments x 5 variations)")
+print("- Measurement time questions (5 instruments x 5 variations + 5 general)")
+print(f"Total: {len(training_examples)} training examples")
+print("Saved to train_can_n_collection_time.jsonl")
